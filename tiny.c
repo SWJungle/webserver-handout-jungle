@@ -7,9 +7,12 @@ void get_filetype(char *filename, char *filetype);
 void serve_static(int fd, char *filename, int filesize);
 void serve_dynamic(int fd, char *filename, char *cgiargs);
 void clientrror(int fd, char *cause, char *errnum, char *shortmsg, char *longmsg);
+void echo(int connfd);
+
 
 int main(int argc, char **argv)
 {
+    printf("Func Main(int argc, char** argv)");
     int listenfd, connfd;
     char hostname[MAXLINE], port[MAXLINE];
     socklen_t clientlen;
@@ -36,6 +39,7 @@ int main(int argc, char **argv)
 
 void doit(int fd) 
 {
+    printf("Func doit(int fd)");
     int is_static;
     struct stat sbuf;
     char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
@@ -76,6 +80,7 @@ void doit(int fd)
 }
 
 void clienterror(int fd, char *cause, char *errnum, char *shortmsg, char*longmsg) {
+    printf("Func clienterror(int fd, char* cause, char* errnum, char* shortmsg, char* longmsg");
     char buf[MAXLINE], body[MAXBUF];
     sprintf(body, "<html><title>Tiny Error</title>");
     sprintf(body, "%s<body bgcolor=""ffffff"">\r\n", body);
@@ -93,6 +98,7 @@ void clienterror(int fd, char *cause, char *errnum, char *shortmsg, char*longmsg
 }
 
 void read_requesthdrs(rio_t *rp) {
+    printf("Func read_requesthdrs(rio_t *rp)");
     char buf[MAXLINE];
 
     Rio_readlineb(rp, buf, MAXLINE);
@@ -104,6 +110,7 @@ void read_requesthdrs(rio_t *rp) {
 }
 
 int parse_uri(char *uri, char *filename, char *cgiargs){ 
+    printf("Func parse_uri(char* uri, char* filename, char* cgiargs");
     char *ptr;
 
     if(!strstr(uri, "cgi-bin")) {
@@ -130,6 +137,7 @@ int parse_uri(char *uri, char *filename, char *cgiargs){
 }
 
 void serve_static(int fd, char *filename, int filesize) {
+    printf("Func serve_static(int fd, char* filename, int filesize");
     int srcfd;
     char *srcp, filetype[MAXLINE], buf[MAXBUF];
 
@@ -151,6 +159,7 @@ void serve_static(int fd, char *filename, int filesize) {
 }
 
 void serve_dynamic(int fd, char *filename, char *cgiargs) {
+    printf("Func serve_dynamic(int fd, char* filename, char* cgiargs");
     char buf[MAXLINE], *emptylist[] = { NULL };
 
     sprintf(buf, "HTTP/1.0 200 OK\r\n");
@@ -167,9 +176,22 @@ void serve_dynamic(int fd, char *filename, char *cgiargs) {
 }
 
 void get_filetype(char *filename, char *filetype) {
+    printf("Func get_filetype(char* filename, char* filetype");
     if (strstr(filename, ".html")) strcpy(filetype, "text/html");
     else if (strstr(filename, ".gif")) strcpy(filetype, "image/gif");
     else if (strstr(filename, ".png")) strcpy(filetype, "image/png");
     else if (strstr(filename, ".jpg")) strcpy(filetype, "image/jpeg");
     else strcpy(filetype, "text/plain");
+}
+
+void echo(int connfd) {
+    size_t n;
+    char buf[MAXLINE];
+    rio_t rio;
+
+    Rio_readinitb(&rio, connfd);
+    while((n = Rio_readlineb(&rio, buf, MAXLINE)) != 0) {
+        printf("server received %d bytes\n", (int)n);
+        Rio_writen(connfd, buf, n);
+    }
 }
