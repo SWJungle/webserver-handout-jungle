@@ -2,7 +2,7 @@
 
 void echo(int connfd);
 
-int main(int argc, int **argv) {
+int main(int argc, char **argv) {
     int listenfd, connfd;
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
@@ -14,7 +14,7 @@ int main(int argc, int **argv) {
     }
 
     listenfd = Open_listenfd(argv[1]);
-    while (true) {
+    while (1) {
         clientlen = sizeof(struct sockaddr_storage);
         connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
         Getnameinfo((SA *) &clientaddr, clientlen, client_hostname, MAXLINE, client_port, MAXLINE, 0);

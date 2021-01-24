@@ -19,6 +19,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "usage: %s <port>\n", argv[0]);
         exit(1);
     }
+    printf("oh tae yang!!");
 
     listenfd = Open_listenfd(argv[1]);
     while(1) {
@@ -79,8 +80,8 @@ void clienterror(int fd, char *cause, char *errnum, char *shortmsg, char*longmsg
     sprintf(body, "<html><title>Tiny Error</title>");
     sprintf(body, "%s<body bgcolor=""ffffff"">\r\n", body);
     sprintf(body, "%s%s: %s\r\n", body, errnum, shortmsg);
-    spritnf(body, "%s<p>%s: %s\r\n", body, longmsg, cause);
-    srpintf(body, "%s<hr><em>The Tiny Web server</em>\r\n", body);
+    sprintf(body, "%s<p>%s: %s\r\n", body, longmsg, cause);
+    sprintf(body, "%s<hr><em>The Tiny Web server</em>\r\n", body);
 
     sprintf(buf, "HTTP/1.0 %s %s\r\n", errnum, shortmsg);
     Rio_writen(fd, buf, strlen(buf));
@@ -96,7 +97,7 @@ void read_requesthdrs(rio_t *rp) {
 
     Rio_readlineb(rp, buf, MAXLINE);
     while(strcmp(buf, "\r\n")) {
-        Rio_readlineb(rp, nuf, MAXLINE);
+        Rio_readlineb(rp, buf, MAXLINE);
         printf("%s", buf);
     }
     return;
@@ -166,7 +167,7 @@ void serve_dynamic(int fd, char *filename, char *cgiargs) {
 }
 
 void get_filetype(char *filename, char *filetype) {
-    if (strstr(filenamel, ".html")) strcpy(filetype, "text/html");
+    if (strstr(filename, ".html")) strcpy(filetype, "text/html");
     else if (strstr(filename, ".gif")) strcpy(filetype, "image/gif");
     else if (strstr(filename, ".png")) strcpy(filetype, "image/png");
     else if (strstr(filename, ".jpg")) strcpy(filetype, "image/jpeg");
