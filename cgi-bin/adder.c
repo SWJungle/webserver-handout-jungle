@@ -1,7 +1,12 @@
 #include "csapp.h"
 
-int main(void) {
+int main(int argc, char **argv) {
+    if (argc!=2) {
+        fprintf(stderr, "usage %s <num1&num2>\n", argv[0]);
+        exit(1);
+    }
     char *buf, *p;
+    buf = argv[argc-1];
     char arg1[MAXLINE], arg2[MAXLINE], content[MAXLINE];
     int n1=0, n2=0;
 
