@@ -19,6 +19,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "usage: %s <port>\n", argv[0]);
         exit(1);
     }
+    printf("oh tae yang!!");
 
     listenfd = Open_listenfd(argv[1]);
     while(1) {
