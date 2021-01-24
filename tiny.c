@@ -19,7 +19,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "usage: %s <port>\n", argv[0]);
         exit(1);
     }
-    printf("oh tae yang!!");
+    printf("WEEK07_Webserver_Tiny.c\n");
 
     listenfd = Open_listenfd(argv[1]);
     while(1) {
@@ -108,7 +108,7 @@ int parse_uri(char *uri, char *filename, char *cgiargs){
 
     if(!strstr(uri, "cgi-bin")) {
         strcpy(cgiargs, "");
-        strcpy(filename, ".");
+        strcpy(filename, "./");
         strcat(filename, uri);
         if(uri[strlen(uri) - 1] == '/')
             strcat(filename, "home.html");
@@ -123,7 +123,7 @@ int parse_uri(char *uri, char *filename, char *cgiargs){
         else 
             strcpy(cgiargs, "");
         
-        strcpy(filename, '.');
+        strcpy(filename, './');
         strcat(filename, uri);
         return 0;
     }
